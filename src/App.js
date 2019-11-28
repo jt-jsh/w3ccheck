@@ -35,8 +35,14 @@ class App extends React.Component {
 
           let rst = document.createElement("span");
           let rst_text;
+          
+          let encode_check_list = check_list[num];
 
-          axios.get(`https://validator.w3.org/nu/?doc=https%3A%2F%2F${encodeURIComponent(check_list[num])}`)
+          if(check_list[num].indexOf('http') === -1){
+            encode_check_list = 'https://'+check_list[num];
+          }
+
+          axios.get(`https://validator.w3.org/nu/?doc=${encodeURIComponent(encode_check_list)}`)
             .then(result => {
 
               if (result.data.indexOf('class="error"') !== -1) {
@@ -76,7 +82,13 @@ class App extends React.Component {
         let rst = document.createElement("span");
         let rst_text;
 
-        axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2F${encodeURIComponent(check_list[num])}&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=ko`)
+        let encode_check_list = check_list[num];
+          
+        if(check_list[num].indexOf('http') === -1){
+          encode_check_list = 'https://'+check_list[num];
+        }
+
+        axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=${encodeURIComponent(encode_check_list)}&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=ko`)
           .then(result => {
 
             if (result.data.indexOf('id="errors"') !== -1) {
