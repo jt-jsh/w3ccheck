@@ -21,12 +21,17 @@ button {
 .App {
     padding:15px;
 }
+
+.w3c_check {
+    max-width:600px;
+    margin: 0 auto;
+}
     
 #w3c_area {
     width:100%;
     height:400px;
     resize: none;
-    font-size:1.2em;
+    font-size:0.9em;
     font-weight:bold;
     font-family:"NanumSquare";
     border-radius: 5px;

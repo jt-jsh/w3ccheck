@@ -88,10 +88,10 @@ class App extends React.Component {
           encode_check_list = 'https://'+check_list[num];
         }
 
-        axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=${encodeURIComponent(encode_check_list)}&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=ko`)
+        axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=${encodeURIComponent(encode_check_list)}&profile=css3svg&output=json`)
           .then(result => {
 
-            if (result.data.indexOf('id="errors"') !== -1) {
+            if (result.data.cssvalidation.errors) {
               rst_text = document.createTextNode("X");
               rst.className = "error";
             } else {
