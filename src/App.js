@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import './App.css';
+// import DocParser from './DocParser';
 
 class App extends React.Component {
   state = {
@@ -136,6 +137,8 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        {/* <a id="hi098123btn" onClick={() => DocParser('hwp')}>한글(.hwp) 다운로드</a> */}
+        {/* <button id="hi098123btn" onClick={() => DocParser('doc', 121)}>리스트 다운로드</button> */}
         <div className="w3c_check">
           <h3 className="tit">W3C HTML/CSS Check</h3>
           <textarea id="w3c_area" placeholder="url을 작성하세요.(구분 - 줄바꿈)" readOnly={this.state.checking ? true : false}></textarea>
