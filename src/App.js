@@ -42,33 +42,38 @@ class App extends React.Component {
             encode_check_list = 'https://'+check_list[num];
           }
 
-          axios.get(`https://validator.w3.org/nu/?doc=${encodeURIComponent(encode_check_list)}`)
-            .then(result => {
+          axios.get(`https://validator.w3.org/nu/?doc=${encodeURIComponent(encode_check_list)}&out=json`)
+          .then(result => {
+            if(result.data.messages){
+              let errors = 0;
+              result.data.messages.filter((obj) => {
+                if(obj.type === "error") errors++;
+              });
 
-              if (result.data.indexOf('class="error"') !== -1) {
-                rst_text = document.createTextNode("X");
+              if(errors > 0){
+                rst_text = document.createTextNode("X("+errors+")");
                 rst.className = "error";
               } else {
                 rst_text = document.createTextNode("O");
                 rst.className = "success";
               }
 
-              console.log("HTML Check OK");
-
               rst.appendChild(rst_text);
               li.appendChild(rst);
 
               css_check(num);
-            })
-            .catch(err => {
-              console.log(err);
-              rst_text = document.createTextNode("ERROR");
-              rst.className = "error";
-              rst.appendChild(rst_text);
-              li.appendChild(rst);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            rst_text = document.createTextNode("ERROR");
+            rst.className = "error";
+            rst.appendChild(rst_text);
+            li.appendChild(rst);
 
-              css_check(num);
-            });
+            css_check(num);
+          });
+            
         } else {
           console.log("End W3C Checked");
           this.setState({
@@ -92,7 +97,7 @@ class App extends React.Component {
           .then(result => {
 
             if (result.data.cssvalidation.errors) {
-              rst_text = document.createTextNode("X");
+              rst_text = document.createTextNode("X("+result.data.cssvalidation.result.errorcount+")");
               rst.className = "error";
             } else {
               rst_text = document.createTextNode("O");
