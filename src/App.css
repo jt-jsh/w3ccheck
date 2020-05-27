@@ -1,8 +1,45 @@
+@font-face {
+    font-family: 'Roboto';
+    src: local(Roboto-Regular),
+         local(Roboto),
+         url(./fonts/Roboto-Regular.woff) format('woff'),
+         url(./fonts/Roboto-Regular.ttf) format('truetype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: local(Roboto-Bold),
+         local(Roboto),
+         url(./fonts/Roboto-Bold.woff) format('woff'),
+         url(./fonts/Roboto-Bold.ttf) format('truetype');
+    font-style: normal;
+    font-weight: bold;
+}
+
 * {
     box-sizing:border-box;
     padding:0;
     margin:0;
 }
+
+*:focus {
+    outline: none;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    font-family: 'Roboto';
+    font-weight: normal;
+    font-size:1.6em;
+    background:#fbfbfb;
+    color:#333;
+}
+
 ul,li,ol {
     list-style:
     none;
@@ -23,19 +60,34 @@ button {
 }
 
 .w3c_check {
-    max-width:600px;
+    max-width:1000px;
     margin: 0 auto;
+}
+
+.w3c_check .tit {
+    font-size:2em;
+    margin-bottom: 10px;
+}
+
+.w3c_check_wrap {
+    padding: 15px;
+    background:#fff;
+    box-shadow: 0 0 5px rgba(0,0,0,.15);
+    border-radius: 10px;
+    overflow: hidden;
 }
     
 #w3c_area {
     width:100%;
     height:400px;
     resize: none;
-    font-size:0.9em;
-    font-weight:bold;
+    font-size:1em;
     font-family:"NanumSquare";
     border-radius: 5px;
     padding:15px;
+    border-color: #ccc;
+    vertical-align: top;
+    font-family: initial;
 }
 
 #w3c_area:read-only {
@@ -45,12 +97,14 @@ button {
 #w3c_btn {
     width:100%;
     line-height: 1;
-    background:#000;
-    color:#fff;
+    background:#f33;
+    color: #fff;
     font-size: 1em;
     font-weight:bold;
-    padding: 10px;
+    padding: 20px;
     border-radius: 5px;
+    margin-top:10px;
+    vertical-align: top;
     overflow:hidden;
 }
 
@@ -59,60 +113,62 @@ button {
 }
 
 #w3c_btn.checking:after {
-    content:"검사중...";
+    content:"CHECKING...";
     display:block;
     position: absolute;
     top:0;
     left:0;
     right:0;
     bottom:0;
-    background:#fff;
-    border:2px solid #000;
-    color:#000;
+    background:#ddd;
+    border:1px solid #ccc;
+    color:#333;
     text-align: center;
-    padding:8px;
+    padding:20px;
     border-radius: 5px;
 }
     
 .w3c_result_wrap {
     margin-top:20px;
     background:#fff;
-    border:1px solid #000;
+    border:1px solid #ccc;
     border-radius: 5px;
 }
 
 #w3c_result_header {
     display:flex;
-    flex-flow: row nowrap;   
+    flex-flow: row nowrap;
 }
 
 #w3c_result_header > li {
     width:33.33333%;
     text-align: center;
-    padding:5px;
+    padding:10px;
+    font-weight: bold;
 }
+
 
 #w3c_result > li {
         display:flex;
         flex-flow: row nowrap;
+        border-top:1px solid #ccc;
 }
 
 #w3c_result > li span {
     width:33.3333%;
     text-align: center;
     display:block;
-    padding:5px;
-    font-weight:bold;
+    padding:10px;
 }
 
 #w3c_result > li .url {
-            
+    word-break: break-all;
 }
 
 #w3c_result > li .success {
-    color:blue;
+    color:rgb(26,115,232);
 }
 
 #w3c_result > li .error {
-    color:red;
+    color:#f33;
 }

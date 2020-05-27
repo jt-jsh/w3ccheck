@@ -52,10 +52,10 @@ class App extends React.Component {
               });
 
               if(errors > 0){
-                rst_text = document.createTextNode("X("+errors+")");
+                rst_text = document.createTextNode("ERR("+errors+")");
                 rst.className = "error";
               } else {
-                rst_text = document.createTextNode("O");
+                rst_text = document.createTextNode("PASS");
                 rst.className = "success";
               }
 
@@ -67,7 +67,7 @@ class App extends React.Component {
           })
           .catch(err => {
             console.log(err);
-            rst_text = document.createTextNode("ERROR");
+            rst_text = document.createTextNode("FAIL");
             rst.className = "error";
             rst.appendChild(rst_text);
             li.appendChild(rst);
@@ -98,14 +98,14 @@ class App extends React.Component {
           .then(result => {
 
             if (result.data.cssvalidation.errors) {
-              rst_text = document.createTextNode("X("+result.data.cssvalidation.result.errorcount+")");
+              rst_text = document.createTextNode("ERR("+result.data.cssvalidation.result.errorcount+")");
               rst.className = "error";
             } else {
-              rst_text = document.createTextNode("O");
+              rst_text = document.createTextNode("PASS");
               rst.className = "success";
             }
 
-            console.log("CSS Check OK");
+            console.log("CSS CHECK OK");
 
             rst.appendChild(rst_text);
             document.querySelector(".list" + num).appendChild(rst);
@@ -116,7 +116,7 @@ class App extends React.Component {
           .catch(err => {
             console.log(err);
 
-            rst_text = document.createTextNode("ERROR");
+            rst_text = document.createTextNode("FAIL");
             rst.className = "error";
 
             rst.appendChild(rst_text);
@@ -129,7 +129,7 @@ class App extends React.Component {
 
       recycle(0);
     } else {
-      alert("url을 작성하세요");
+      alert("URL을 작성하세요");
       document.getElementById("w3c_area").focus();
     }
   }
@@ -140,18 +140,20 @@ class App extends React.Component {
         {/* <a id="hi098123btn" onClick={() => DocParser('hwp')}>한글(.hwp) 다운로드</a> */}
         {/* <button id="hi098123btn" onClick={() => DocParser('doc', 121)}>리스트 다운로드</button> */}
         <div className="w3c_check">
-          <h3 className="tit">W3C HTML/CSS Check</h3>
-          <textarea id="w3c_area" placeholder="url을 작성하세요.(구분 - 줄바꿈)" readOnly={this.state.checking ? true : false}></textarea>
-          <button id="w3c_btn" className={this.state.checking ? "checking" : null} onClick={this.state.checking ? null : this.w3c_check}>검사</button>
-          <div className="w3c_result_wrap">
-            <ul id="w3c_result_header">
-              <li><span>URL</span></li>
-              <li><span>HTML</span></li>
-              <li><span>CSS</span></li>
-            </ul>
-            <ul id="w3c_result">
+          <h3 className="tit">W3C HTML AND CSS CHECK</h3>
+          <div className="w3c_check_wrap">
+            <textarea id="w3c_area" placeholder="URL" readOnly={this.state.checking ? true : false}></textarea>
+            <button id="w3c_btn" className={this.state.checking ? "checking" : null} onClick={this.state.checking ? null : this.w3c_check}>START</button>
+            <div className="w3c_result_wrap">
+              <ul id="w3c_result_header">
+                <li><span>URL</span></li>
+                <li><span>HTML</span></li>
+                <li><span>CSS</span></li>
+              </ul>
+              <ul id="w3c_result">
 
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
