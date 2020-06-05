@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "w3c-check"
+    "default": "w3c-check",
+    "e.g. staging": "w3c-check-5db0b"
   }
 }

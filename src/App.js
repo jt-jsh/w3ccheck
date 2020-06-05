@@ -5,7 +5,12 @@ import './App.css';
 
 class App extends React.Component {
   state = {
-    checking: false
+    checking: false,
+    lists: []
+  }
+
+  UNSAFE_componentWillUpdate(nextProps, nextState){
+    console.log(this.state);
   }
 
   w3c_check = () => {
@@ -28,6 +33,7 @@ class App extends React.Component {
           let li = document.createElement("li");
           let url = document.createElement("span");
           let url_text = document.createTextNode(check_list[num]);
+
           url.appendChild(url_text);
           url.className = "url";
           li.appendChild(url);
@@ -43,12 +49,47 @@ class App extends React.Component {
             encode_check_list = 'https://'+check_list[num];
           }
 
+          this.setState({
+            lists: [
+              ...this.state.lists,
+              {
+                url : encode_check_list,
+                html: {
+                  errors: []
+                },
+                css: {
+                  errors: []
+                }
+              }
+            ]
+          });
+
           axios.get(`https://validator.w3.org/nu/?doc=${encodeURIComponent(encode_check_list)}&out=json`)
           .then(result => {
             if(result.data.messages){
               let errors = 0;
               result.data.messages.filter((obj) => {
-                if(obj.type === "error") errors++;
+                if(obj.type === "error") {
+                  this.setState({
+                    lists: [
+                      {
+                        ...this.state.lists[i],
+                        html: {
+                          ...this.state.lists[i].html,
+                          errors: [
+                            ...this.state.lists[i].html.errors,
+                            {
+                              line: obj.lastLine,
+                              extract: obj.extract,
+                              message: obj.message
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  });
+                  errors++;
+                }
               });
 
               if(errors > 0){
@@ -96,10 +137,21 @@ class App extends React.Component {
 
         axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=${encodeURIComponent(encode_check_list)}&profile=css3svg&output=json`)
           .then(result => {
-
             if (result.data.cssvalidation.errors) {
               rst_text = document.createTextNode("ERR("+result.data.cssvalidation.result.errorcount+")");
               rst.className = "error";
+              this.setState({
+                lists: [
+                  {
+                    ...this.state.lists[i],
+                    css: {
+                      ...this.state.lists[i].css,
+                      errors: result.data.cssvalidation.errors
+                      
+                    }
+                  }
+                ]
+              })
             } else {
               rst_text = document.createTextNode("PASS");
               rst.className = "success";
@@ -151,7 +203,22 @@ class App extends React.Component {
                 <li><span>CSS</span></li>
               </ul>
               <ul id="w3c_result">
-
+                {/* <li class="list0">
+                  <span class="url">https://www.busan.go.kr/car/crreduceship</span>
+                  <span class="error">ERR(162)</span><span class="error">ERR(193)</span>
+                </li> */}
+                {
+                  this.state.lists ?
+                  <ul id="w3c_result">
+                    {this.state.lists.map((index, list) => {
+                      return <li className={`list${index}`}>
+                        <span className="url"><a href={list.url} title="새창" target="_blank">{list.url}</a></span>
+                        <span className="error"></span>
+                      </li>
+                    })}
+                  </ul>
+                  : null
+                }
               </ul>
             </div>
           </div>
