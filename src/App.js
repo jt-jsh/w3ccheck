@@ -6,7 +6,7 @@ import './App.css';
 class App extends React.Component {
   state = {
     checking: false,
-    lists: []
+    lists: false
   }
 
   UNSAFE_componentWillUpdate(nextProps, nextState){
@@ -29,19 +29,6 @@ class App extends React.Component {
 
       const recycle = (num) => {
         if (i < check_list.length) {
-
-          let li = document.createElement("li");
-          let url = document.createElement("span");
-          let url_text = document.createTextNode(check_list[num]);
-
-          url.appendChild(url_text);
-          url.className = "url";
-          li.appendChild(url);
-          li.className = "list" + num;
-          document.getElementById("w3c_result").appendChild(li);
-
-          let rst = document.createElement("span");
-          let rst_text;
           
           let encode_check_list = check_list[num];
 
@@ -92,26 +79,11 @@ class App extends React.Component {
                 }
               });
 
-              if(errors > 0){
-                rst_text = document.createTextNode("ERR("+errors+")");
-                rst.className = "error";
-              } else {
-                rst_text = document.createTextNode("PASS");
-                rst.className = "success";
-              }
-
-              rst.appendChild(rst_text);
-              li.appendChild(rst);
-
               css_check(num);
             }
           })
           .catch(err => {
             console.log(err);
-            rst_text = document.createTextNode("FAIL");
-            rst.className = "error";
-            rst.appendChild(rst_text);
-            li.appendChild(rst);
 
             css_check(num);
           });
@@ -126,9 +98,6 @@ class App extends React.Component {
 
       const css_check = (num) => {
 
-        let rst = document.createElement("span");
-        let rst_text;
-
         let encode_check_list = check_list[num];
           
         if(check_list[num].indexOf('http') === -1){
@@ -137,9 +106,7 @@ class App extends React.Component {
 
         axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=${encodeURIComponent(encode_check_list)}&profile=css3svg&output=json`)
           .then(result => {
-            if (result.data.cssvalidation.errors) {
-              rst_text = document.createTextNode("ERR("+result.data.cssvalidation.result.errorcount+")");
-              rst.className = "error";
+            if (result) {
               this.setState({
                 lists: [
                   {
@@ -152,27 +119,15 @@ class App extends React.Component {
                   }
                 ]
               })
-            } else {
-              rst_text = document.createTextNode("PASS");
-              rst.className = "success";
             }
 
             console.log("CSS CHECK OK");
-
-            rst.appendChild(rst_text);
-            document.querySelector(".list" + num).appendChild(rst);
 
             i++;
             recycle(i);
           })
           .catch(err => {
             console.log(err);
-
-            rst_text = document.createTextNode("FAIL");
-            rst.className = "error";
-
-            rst.appendChild(rst_text);
-            document.querySelector(".list" + num).appendChild(rst);
 
             i++;
             recycle(i);
@@ -210,8 +165,9 @@ class App extends React.Component {
                 {
                   this.state.lists ?
                   <ul id="w3c_result">
-                    {this.state.lists.map((index, list) => {
-                      return <li className={`list${index}`}>
+                    {Object.values(this.state.lists).map((list, index) => {
+                      console.log(list.url);
+                      return <li className={`list${index}`} key={index}>
                         <span className="url"><a href={list.url} title="새창" target="_blank">{list.url}</a></span>
                         <span className="error"></span>
                       </li>
