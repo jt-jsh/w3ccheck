@@ -169,7 +169,7 @@ class App extends React.Component {
                       console.log(list.url);
                       return <li className={`list${index}`} key={index}>
                         <span className="url"><a href={list.url} title="새창" target="_blank">{list.url}</a></span>
-                        <span className="error"></span>
+                        <span className="error">짜증나네</span>
                       </li>
                     })}
                   </ul>
