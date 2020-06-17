@@ -55,7 +55,7 @@ button {
     cursor: pointer;
 }
 
-.App {
+.app {
     padding:15px;
 }
 
@@ -64,7 +64,7 @@ button {
     margin: 0 auto;
 }
 
-.w3c_check .tit {
+.w3c_check > .tit {
     font-size:2em;
     margin-bottom: 10px;
 }
@@ -149,26 +149,29 @@ button {
 
 
 #w3c_result > li {
-        display:flex;
-        flex-flow: row nowrap;
         border-top:1px solid #ccc;
 }
 
-#w3c_result > li span {
+#w3c_result .head {
+    display:flex;
+    flex-flow: row nowrap;
+}
+
+#w3c_result .head span {
     width:33.3333%;
     text-align: center;
     display:block;
     padding:10px;
 }
 
-#w3c_result > li .url {
+#w3c_result .head .url {
     word-break: break-all;
 }
 
-#w3c_result > li .success {
+#w3c_result .head .pass {
     color:rgb(26,115,232);
 }
 
-#w3c_result > li .error {
+#w3c_result .head .error {
     color:#f33;
 }
