@@ -5,9 +5,29 @@ import styled from 'styled-components';
 const Result = () => {
     const { lists } = useContext(W3C_Context);
 
-    function resultOpenHandler(e){
-        document.getElementById(`result${e}`).style.display = "block";
+    function resultOpenHandler(index){
+        let rslt = document.getElementById(`result${index}`);
+        let height;
+        
+        if(rslt.dataset.show == 'N'){
+            rslt.style.height = 'auto';
+            height = rslt.offsetHeight;
+            rslt.style.height = '0px';
+        }
+
+        setTimeout(() => {
+            if(rslt.dataset.show == 'Y'){
+                rslt.dataset.show = 'N';
+                rslt.style.height = '0px';
+            } else {
+                rslt.dataset.show = 'Y'; 
+                rslt.style.height = height+'px';
+            }
+        });
+
     }
+
+    
 
     return (
         <Wrap>
@@ -18,17 +38,21 @@ const Result = () => {
             </ResultHeader>
             <ResultBody>
                 {Object.values(lists).map((list, index) => {
+
+                    const htmlError = list.html.errors && list.html.errors !== 'WAIT' && list.html.errors !== 'FAIL';
+                    const cssError = list.css.errors && list.css.errors !== 'WAIT' && list.css.errors !== 'FAIL';
+
                     return <ResultBodyLi key={index}>
                         <Head onClick={() => resultOpenHandler(index)}>
                             <HeadSpan><a href={list.url} title="새창" target="_blank" rel="noopener noreferrer">{list.url}</a></HeadSpan>
-                            <HeadSpan state={list.html.errors ? 'error' : 'pass'}>{list.html.errors ? `ERROR[${Object.keys(list.html.errors).length}]` : 'PASS'}</HeadSpan>
-                            <HeadSpan state={list.css.errors ? 'error' : 'pass'}>{list.css.errors ? `ERROR[${Object.keys(list.css.errors).length}]` : 'PASS'}</HeadSpan>
+                            <HeadSpan state={htmlError ? 'error' : 'pass'}>{htmlError ? `ERROR[${Object.keys(list.html.errors).length}]` : 'PASS'}</HeadSpan>
+                            <HeadSpan state={cssError ? 'error' : 'pass'}>{cssError ? `ERROR[${Object.keys(list.css.errors).length}]` : 'PASS'}</HeadSpan>
                         </Head>
-                        <Body id={`result${index}`}>
+                        <Body id={`result${index}`} data-show='N' style={{height: 0}}>
                             <Html>
                                 <Title>HTML CHECKED RESULT</Title>
                                 <List>
-                                    {list.html.errors ?
+                                    {htmlError ?
                                         Object.values(list.html.errors).map((item, index) => {
                                             return <Item key={index}>
                                                 <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
@@ -42,7 +66,7 @@ const Result = () => {
                             <Css>
                                 <Title>CSS CHECKED RESULT</Title>
                                 <List>
-                                    {list.css.errors ?
+                                    {cssError ?
                                         Object.values(list.css.errors).map((item, index) => {
                                             return <Item key={index}>
                                                 <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
@@ -92,6 +116,23 @@ const Head = styled.div`
     display:flex;
     flex-flow: row nowrap;
     cursor: pointer;
+    position: relative;
+
+    &:after {
+        content:"";
+        display: block;
+        position: absolute;
+        top:100%;
+        bottom:0;
+        left:0;
+        right:0;
+        background: rgba(0,0,0,.025);
+        transition: all 0.5s ease-in-out;
+    }
+
+    &:hover:after {
+        top:70%;
+    }
 `;
 
 const HeadSpan = styled.span`
@@ -104,7 +145,13 @@ const HeadSpan = styled.span`
 `;
 
 const Body = styled.div`
-    display:none;
+    overflow:hidden;
+    visibility:hidden;
+    transition:all 1000ms ease-in-out; 
+
+    &[data-show='Y'] {
+        visibility:visible;
+    }
 `;
 
 const Title = styled.h4`

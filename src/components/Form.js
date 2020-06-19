@@ -8,7 +8,7 @@ const Form = ({w3cCheck}) => {
 
     return (
         <React.Fragment>
-            <TextArea id="w3c_area" placeholder="URL" readOnly={checking}/>
+            <TextArea id="w3c_area" placeholder="url을 입력하세요. 목록 구분은 줄바꿈으로 구분됩니다.&#13;&#10;예)&#13;&#10;http://www.abc.com&#13;&#10;http://github.io" readOnly={checking}/>
             <Button checking={checking} onClick={checking ? null : w3cCheck}>{checking ? 'CHECKING...' : 'START'}</Button>
         </React.Fragment>
     )
@@ -33,6 +33,7 @@ const Button = styled.button`
     line-height: 1;
     background: ${props => props.checking ? '#fbfbfb' : '#f33'};
     color: ${props => props.checking ? '#333' : '#fff'};
+    border: ${props => props.checking ? '1px solid #ccc' : '1px solid #f33'};
     font-size: 1em;
     font-weight:bold;
     padding: 20px;

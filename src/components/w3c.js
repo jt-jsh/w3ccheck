@@ -43,10 +43,10 @@ class W3C extends Component {
                             [i]: {
                                 url: encode_check_list,
                                 html: {
-                                    errors: false
+                                    errors: 'WAIT'
                                 },
                                 css: {
-                                    errors: false
+                                    errors: 'WAIT'
                                 }
                             }
                         }
@@ -86,6 +86,19 @@ class W3C extends Component {
                         })
                         .catch(err => {
                             console.log(err);
+
+                            this.setState({
+                                lists: {
+                                    ...this.state.lists,
+                                    [i]: {
+                                        ...this.state.lists[i],
+                                        html: {
+                                            ...this.state.lists[i].html,
+                                            errors: 'FAIL'
+                                        }
+                                    }
+                                }
+                            });
 
                             css_check(num);
                         });
@@ -131,6 +144,16 @@ class W3C extends Component {
                     })
                     .catch(err => {
                         console.log(err);
+                        
+                        this.setState({
+                            lists: {
+                                ...this.state.lists,
+                                [i]: {
+                                    ...this.state.lists[i],
+                                    css: 'FAIL'
+                                }
+                            }
+                        })
 
                         i++;
                         recycle(i);
