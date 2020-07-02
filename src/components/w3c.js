@@ -43,10 +43,10 @@ class W3C extends Component {
                             [i]: {
                                 url: encode_check_list,
                                 html: {
-                                    errors: 'WAIT'
+                                    errors: 'wait'
                                 },
                                 css: {
-                                    errors: 'WAIT'
+                                    errors: 'wait'
                                 }
                             }
                         }
@@ -55,6 +55,19 @@ class W3C extends Component {
                     axios.get(`https://validator.w3.org/nu/?doc=${encodeURIComponent(encode_check_list)}&out=json`)
                         .then(result => {
                             if (result.data.messages) {
+
+                                this.setState({
+                                    lists: {
+                                        ...this.state.lists,
+                                        [i]: {
+                                            ...this.state.lists[i],
+                                            html: {
+                                                errors: {}
+                                            }
+                                        }
+                                    }
+                                });
+
                                 result.data.messages.filter((obj, index) => {
                                     if (obj.type === "error") {
                                         this.setState({
@@ -94,7 +107,7 @@ class W3C extends Component {
                                         ...this.state.lists[i],
                                         html: {
                                             ...this.state.lists[i].html,
-                                            errors: 'FAIL'
+                                            errors: 'fail'
                                         }
                                     }
                                 }
@@ -129,8 +142,7 @@ class W3C extends Component {
                                         ...this.state.lists[i],
                                         css: {
                                             ...this.state.lists[i].css,
-                                            errors: result.data.cssvalidation.errors ? result.data.cssvalidation.errors : false
-
+                                            errors: result.data.cssvalidation.errors ? result.data.cssvalidation.errors : 'pass'
                                         }
                                     }
                                 }
@@ -138,6 +150,8 @@ class W3C extends Component {
                         }
 
                         console.log("CSS CHECK OK");
+
+                        console.log(this.state)
 
                         i++;
                         recycle(i);
@@ -150,11 +164,13 @@ class W3C extends Component {
                                 ...this.state.lists,
                                 [i]: {
                                     ...this.state.lists[i],
-                                    css: 'FAIL'
+                                    css: {
+                                        errors: 'fail'
+                                    }
                                 }
                             }
                         })
-
+                        
                         i++;
                         recycle(i);
                     });

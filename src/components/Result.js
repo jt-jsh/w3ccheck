@@ -7,23 +7,12 @@ const Result = () => {
 
     function resultOpenHandler(index){
         let rslt = document.getElementById(`result${index}`);
-        let height;
         
         if(rslt.dataset.show == 'N'){
-            rslt.style.height = 'auto';
-            height = rslt.offsetHeight;
-            rslt.style.height = '0px';
+            rslt.dataset.show = 'Y';
+        } else {
+            rslt.dataset.show = 'N';
         }
-
-        setTimeout(() => {
-            if(rslt.dataset.show == 'Y'){
-                rslt.dataset.show = 'N';
-                rslt.style.height = '0px';
-            } else {
-                rslt.dataset.show = 'Y'; 
-                rslt.style.height = height+'px';
-            }
-        });
 
     }
 
@@ -39,16 +28,58 @@ const Result = () => {
             <ResultBody>
                 {Object.values(lists).map((list, index) => {
 
-                    const htmlError = list.html.errors && list.html.errors !== 'WAIT' && list.html.errors !== 'FAIL';
-                    const cssError = list.css.errors && list.css.errors !== 'WAIT' && list.css.errors !== 'FAIL';
+                    const htmlError = list.html.errors;
+                    const cssError = list.css.errors;
+
+                    console.log(typeof htmlError, typeof cssError)
+
+                    let htmlMessage;
+                    let cssMessage;
+
+                    switch(htmlError){
+                        case 'fail': {
+                            htmlMessage = 'Fail';
+                            break;
+                        }
+                        case 'wait': {
+                            htmlMessage = 'Wait';
+                            break;
+                        }
+                        case 'pass': {
+                            htmlMessage = 'Pass';
+                            break;
+                        }
+                        default: {
+                            htmlMessage = 'Error';
+                        }
+                    }
+
+                    switch(cssError){
+                        case 'fail': {
+                            cssMessage = 'Fail';
+                            break;
+                        }
+                        case 'wait': {
+                            cssMessage = 'Wait';
+                            break;
+                        }
+                        case 'pass': {
+                            cssMessage = 'Pass';
+                            break;
+                        }
+                        default: {
+                            cssMessage = 'Error';
+                        }
+                    }
+
 
                     return <ResultBodyLi key={index}>
                         <Head onClick={() => resultOpenHandler(index)}>
                             <HeadSpan><a href={list.url} title="새창" target="_blank" rel="noopener noreferrer">{list.url}</a></HeadSpan>
-                            <HeadSpan state={htmlError ? 'error' : 'pass'}>{htmlError ? `ERROR[${Object.keys(list.html.errors).length}]` : 'PASS'}</HeadSpan>
-                            <HeadSpan state={cssError ? 'error' : 'pass'}>{cssError ? `ERROR[${Object.keys(list.css.errors).length}]` : 'PASS'}</HeadSpan>
+                            <HeadSpan state={typeof htmlError == 'object' || htmlError != 'pass' ? 'error' : 'pass'}>{htmlMessage}</HeadSpan>
+                            <HeadSpan state={typeof cssError == 'object' || cssError != 'pass' ? 'error' : 'pass'}>{cssMessage}</HeadSpan>
                         </Head>
-                        <Body id={`result${index}`} data-show='N' style={{height: 0}}>
+                        <Body id={`result${index}`} data-show='N'>
                             <Html>
                                 <Title>HTML CHECKED RESULT</Title>
                                 <List>
@@ -145,12 +176,9 @@ const HeadSpan = styled.span`
 `;
 
 const Body = styled.div`
-    overflow:hidden;
-    visibility:hidden;
-    transition:all 1000ms ease-in-out; 
-
+    display:none;
     &[data-show='Y'] {
-        visibility:visible;
+        display:block;
     }
 `;
 
