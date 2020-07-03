@@ -187,7 +187,7 @@ class W3C extends Component {
         return (
             <W3C_Context.Provider value={this.state}>
                 <W3CCheck>
-                    <Title>W3C HTML AND CSS CHECK</Title>
+                    <Title>W3C Api Markup and CSS Validation Service</Title>
                     <W3CCheckWrap>
                         <Form w3cCheck={this.w3cCheck}/>
                         <Result/>
