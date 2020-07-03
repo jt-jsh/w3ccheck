@@ -83,7 +83,7 @@ const Result = () => {
                             <Html>
                                 <Title>HTML CHECKED RESULT</Title>
                                 <List>
-                                    {htmlError ?
+                                    {typeof htmlError == 'object' ?
                                         Object.values(list.html.errors).map((item, index) => {
                                             return <Item key={index}>
                                                 <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
@@ -97,7 +97,7 @@ const Result = () => {
                             <Css>
                                 <Title>CSS CHECKED RESULT</Title>
                                 <List>
-                                    {cssError ?
+                                    {typeof cssError == 'object' ?
                                         Object.values(list.css.errors).map((item, index) => {
                                             return <Item key={index}>
                                                 <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
