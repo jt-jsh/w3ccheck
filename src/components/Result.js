@@ -31,8 +31,6 @@ const Result = () => {
                     const htmlError = list.html.errors;
                     const cssError = list.css.errors;
 
-                    console.log(typeof htmlError, typeof cssError)
-
                     let htmlMessage;
                     let cssMessage;
 
@@ -91,7 +89,14 @@ const Result = () => {
                                                 <Row>{item.message}</Row>
                                             </Item>
                                         })
-                                        : <Item>No Error!</Item>}
+                                        : htmlError == 'fail' ?
+                                            <Item>Check failed (-_-;)</Item>
+                                        : htmlError == 'wait' ?
+                                            <Item>Current Checking (=_=;)</Item>
+                                        : htmlError == 'pass' ?
+                                            <Item>No Errors! \(oOo)/</Item>
+                                        : <Item>Umm...</Item>
+                                    }
                                 </List>
                             </Html>
                             <Css>
@@ -105,7 +110,14 @@ const Result = () => {
                                                 <Row>{item.message}</Row>
                                             </Item>
                                         })
-                                        : <Item>No Error!</Item>}
+                                        : cssError == 'fail' ?
+                                            <Item>Check failed (-_-;)</Item>
+                                        : cssError == 'wait' ?
+                                            <Item>Current Checking (=_=;)</Item>
+                                        : cssError == 'pass' ?
+                                            <Item>No Errors! \(oOo)/</Item>
+                                        : <Item>Umm...</Item>
+                                    }
                                 </List>
                             </Css>
                         </Body>

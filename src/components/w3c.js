@@ -16,6 +16,10 @@ class W3C extends Component {
         }
     }
 
+    UNSAFE_componentWillUpdate(){
+        console.log(this.state);
+    }
+
     w3cCheck = () => {
 
         if (document.getElementById("w3c_area").value) {
@@ -56,6 +60,8 @@ class W3C extends Component {
                         .then(result => {
                             if (result.data.messages) {
 
+                                let count = 0;
+
                                 this.setState({
                                     lists: {
                                         ...this.state.lists,
@@ -70,6 +76,9 @@ class W3C extends Component {
 
                                 result.data.messages.filter((obj, index) => {
                                     if (obj.type === "error") {
+
+                                        count++;
+
                                         this.setState({
                                             lists: {
                                                 ...this.state.lists,
@@ -91,6 +100,21 @@ class W3C extends Component {
                                         });
                                     }
                                 });
+
+                                if(count === 0){
+                                    this.setState({
+                                        lists: {
+                                            ...this.state.lists,
+                                            [i]: {
+                                                ...this.state.lists[i],
+                                                html: {
+                                                    ...this.state.lists[i].html,
+                                                    errors: 'pass'
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
 
                                 console.log("HTML CHECK OK");
 
