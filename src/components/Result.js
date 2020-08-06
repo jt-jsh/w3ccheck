@@ -26,103 +26,106 @@ const Result = () => {
                 <ResultHeaderLi>CSS</ResultHeaderLi>
             </ResultHeader>
             <ResultBody>
-                {Object.values(lists).map((list, index) => {
+                {lists ? 
+                    Object.values(lists).map((list, index) => {
 
-                    const htmlError = list.html.errors;
-                    const cssError = list.css.errors;
-
-                    let htmlMessage;
-                    let cssMessage;
-
-                    switch(htmlError){
-                        case 'fail': {
-                            htmlMessage = 'Fail';
-                            break;
+                        const htmlError = list.html.errors;
+                        const cssError = list.css.errors;
+    
+                        let htmlMessage;
+                        let cssMessage;
+    
+                        switch(htmlError){
+                            case 'fail': {
+                                htmlMessage = 'Fail';
+                                break;
+                            }
+                            case 'wait': {
+                                htmlMessage = 'Wait';
+                                break;
+                            }
+                            case 'pass': {
+                                htmlMessage = 'Pass';
+                                break;
+                            }
+                            default: {
+                                htmlMessage = 'Error';
+                            }
                         }
-                        case 'wait': {
-                            htmlMessage = 'Wait';
-                            break;
+    
+                        switch(cssError){
+                            case 'fail': {
+                                cssMessage = 'Fail';
+                                break;
+                            }
+                            case 'wait': {
+                                cssMessage = 'Wait';
+                                break;
+                            }
+                            case 'pass': {
+                                cssMessage = 'Pass';
+                                break;
+                            }
+                            default: {
+                                cssMessage = 'Error';
+                            }
                         }
-                        case 'pass': {
-                            htmlMessage = 'Pass';
-                            break;
-                        }
-                        default: {
-                            htmlMessage = 'Error';
-                        }
-                    }
-
-                    switch(cssError){
-                        case 'fail': {
-                            cssMessage = 'Fail';
-                            break;
-                        }
-                        case 'wait': {
-                            cssMessage = 'Wait';
-                            break;
-                        }
-                        case 'pass': {
-                            cssMessage = 'Pass';
-                            break;
-                        }
-                        default: {
-                            cssMessage = 'Error';
-                        }
-                    }
-
-
-                    return <ResultBodyLi key={index}>
-                        <Head onClick={() => resultOpenHandler(index)}>
-                            <HeadSpan><a href={list.url} title="새창" target="_blank" rel="noopener noreferrer">{list.url}</a></HeadSpan>
-                            <HeadSpan state={typeof htmlError == 'object' || htmlError != 'pass' ? 'error' : 'pass'}>{htmlMessage}</HeadSpan>
-                            <HeadSpan state={typeof cssError == 'object' || cssError != 'pass' ? 'error' : 'pass'}>{cssMessage}</HeadSpan>
-                        </Head>
-                        <Body id={`result${index}`} data-show='N'>
-                            <Html>
-                                <Title>HTML CHECKED RESULT</Title>
-                                <List>
-                                    {typeof htmlError == 'object' ?
-                                        Object.values(list.html.errors).map((item, index) => {
-                                            return <Item key={index}>
-                                                <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
-                                                <Row flex='6' background='#333' color='#fff'>{item.extract}</Row>
-                                                <Row>{item.message}</Row>
-                                            </Item>
-                                        })
-                                        : htmlError == 'fail' ?
-                                            <Item>Check failed (-_-;)</Item>
-                                        : htmlError == 'wait' ?
-                                            <Item>Current Checking (=_=;)</Item>
-                                        : htmlError == 'pass' ?
-                                            <Item>No Errors! \(oOo)/</Item>
-                                        : <Item>Umm...</Item>
-                                    }
-                                </List>
-                            </Html>
-                            <Css>
-                                <Title>CSS CHECKED RESULT</Title>
-                                <List>
-                                    {typeof cssError == 'object' ?
-                                        Object.values(list.css.errors).map((item, index) => {
-                                            return <Item key={index}>
-                                                <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
-                                                <Row flex='6' background='#333' color='#fff'>{item.source}</Row>
-                                                <Row>{item.message}</Row>
-                                            </Item>
-                                        })
-                                        : cssError == 'fail' ?
-                                            <Item>Check failed (-_-;)</Item>
-                                        : cssError == 'wait' ?
-                                            <Item>Current Checking (=_=;)</Item>
-                                        : cssError == 'pass' ?
-                                            <Item>No Errors! \(oOo)/</Item>
-                                        : <Item>Umm...</Item>
-                                    }
-                                </List>
-                            </Css>
-                        </Body>
-                    </ResultBodyLi>
-                })}
+    
+    
+                        return <ResultBodyLi key={index}>
+                            <Head onClick={() => resultOpenHandler(index)}>
+                                <HeadSpan><a href={list.url} title="새창" target="_blank" rel="noopener noreferrer">{list.url}</a></HeadSpan>
+                                <HeadSpan state={typeof htmlError == 'object' || htmlError != 'pass' ? 'error' : 'pass'}>{htmlMessage}</HeadSpan>
+                                <HeadSpan state={typeof cssError == 'object' || cssError != 'pass' ? 'error' : 'pass'}>{cssMessage}</HeadSpan>
+                            </Head>
+                            <Body id={`result${index}`} data-show='N'>
+                                <Html>
+                                    <Title>HTML CHECKED RESULT</Title>
+                                    <List>
+                                        {typeof htmlError == 'object' ?
+                                            Object.values(list.html.errors).map((item, index) => {
+                                                return <Item key={index}>
+                                                    <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
+                                                    <Row flex='6' background='#333' color='#fff'>{item.extract}</Row>
+                                                    <Row>{item.message}</Row>
+                                                </Item>
+                                            })
+                                            : htmlError == 'fail' ?
+                                                <Item>Check failed (-_-;)</Item>
+                                            : htmlError == 'wait' ?
+                                                <Item>Current Checking (=_=;)</Item>
+                                            : htmlError == 'pass' ?
+                                                <Item>No Errors! \(oOo)/</Item>
+                                            : <Item>Umm...</Item>
+                                        }
+                                    </List>
+                                </Html>
+                                <Css>
+                                    <Title>CSS CHECKED RESULT</Title>
+                                    <List>
+                                        {typeof cssError == 'object' ?
+                                            Object.values(list.css.errors).map((item, index) => {
+                                                return <Item key={index}>
+                                                    <Row flex='1' weight='bold' color='#f33'>line{item.line}</Row>
+                                                    <Row flex='6' background='#333' color='#fff'>{item.source}</Row>
+                                                    <Row>{item.message}</Row>
+                                                </Item>
+                                            })
+                                            : cssError == 'fail' ?
+                                                <Item>Check failed (-_-;)</Item>
+                                            : cssError == 'wait' ?
+                                                <Item>Current Checking (=_=;)</Item>
+                                            : cssError == 'pass' ?
+                                                <Item>No Errors! \(oOo)/</Item>
+                                            : <Item>Umm...</Item>
+                                        }
+                                    </List>
+                                </Css>
+                            </Body>
+                        </ResultBodyLi>
+                    })
+                    : null
+                }
             </ResultBody>
         </Wrap>
     )

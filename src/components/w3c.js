@@ -16,16 +16,13 @@ class W3C extends Component {
         }
     }
 
-    UNSAFE_componentWillUpdate(){
-        console.log(this.state);
-    }
-
     w3cCheck = () => {
 
         if (document.getElementById("w3c_area").value) {
 
             this.setState({
-                checking: true
+                checking: true,
+                lists: false
             });
 
             const check_list = document.getElementById("w3c_area").value.split("\n");
