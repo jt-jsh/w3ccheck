@@ -1,14 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { CSVLink, CSVDownload } from 'react-csv';
+
 import { W3C_Context } from '../contexts/W3C_Context';
 import styled from 'styled-components';
 
 const Result = () => {
-    const { lists } = useContext(W3C_Context);
+    const { lists, complete } = useContext(W3C_Context);
 
-    function resultOpenHandler(index){
+    // const csvData = [
+    //     ['URL', 'HTML', 'CSS'],
+    //     ['ddnkfna']
+    // ];
+
+    // const csvData = [
+    //     { details: { firstName: 'Ahmed', lastName: 'Tomi' }, job: 'manager'},
+    //     { details: { firstName: 'John', lastName: 'Jones' }, job: 'developer'}
+    // ];
+
+    function resultOpenHandler(event, index){
+
+        if(event.target.tagName === 'A') return;
+
         let rslt = document.getElementById(`result${index}`);
         
-        if(rslt.dataset.show == 'N'){
+        if(rslt.dataset.show === 'N'){
             rslt.dataset.show = 'Y';
         } else {
             rslt.dataset.show = 'N';
@@ -16,10 +31,19 @@ const Result = () => {
 
     }
 
-    
+    useEffect(() => {
+        if( lists ){
+            let lslt = document.querySelectorAll('[data-show]');
+            
+            lslt.forEach(item => {
+                item.dataset.show = 'N';
+            });
+        }
+    }, [ lists ]);
 
     return (
         <Wrap>
+            {/* <CSVLink data={csvData}>Download me</CSVLink> */}
             <ResultHeader>
                 <ResultHeaderLi>URL</ResultHeaderLi>
                 <ResultHeaderLi>HTML</ResultHeaderLi>
@@ -73,7 +97,7 @@ const Result = () => {
     
     
                         return <ResultBodyLi key={index}>
-                            <Head onClick={() => resultOpenHandler(index)}>
+                            <Head onClick={(event) => resultOpenHandler(event, index)}>
                                 <HeadSpan><a href={list.url} title="새창" target="_blank" rel="noopener noreferrer">{list.url}</a></HeadSpan>
                                 <HeadSpan state={typeof htmlError == 'object' || htmlError != 'pass' ? 'error' : 'pass'}>{htmlMessage}</HeadSpan>
                                 <HeadSpan state={typeof cssError == 'object' || cssError != 'pass' ? 'error' : 'pass'}>{cssMessage}</HeadSpan>
@@ -91,11 +115,11 @@ const Result = () => {
                                                 </Item>
                                             })
                                             : htmlError == 'fail' ?
-                                                <Item>Check failed (-_-;)</Item>
+                                                <Item>Check failed (-_-)</Item>
                                             : htmlError == 'wait' ?
-                                                <Item>Current Checking (=_=;)</Item>
+                                                <Item>Current Checking...</Item>
                                             : htmlError == 'pass' ?
-                                                <Item>No Errors! \(oOo)/</Item>
+                                                <Item>No Errors! \(o3o)/</Item>
                                             : <Item>Umm...</Item>
                                         }
                                     </List>
@@ -187,7 +211,11 @@ const HeadSpan = styled.span`
     display:block;
     padding:10px;
     word-break: break-all;
-    color: ${props => props.state == 'error' ? '#f33' : 'rgb(26,115,232)'}
+    color: ${props => props.state == 'error' ? '#f33' : 'rgb(26,115,232)'};
+    & > a:hover {
+        text-underline-position: under;
+        text-decoration: underline;
+    }
 `;
 
 const Body = styled.div`

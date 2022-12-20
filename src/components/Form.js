@@ -22,7 +22,7 @@ const TextArea = styled.textarea`
     font-family:"NanumSquare";
     border-radius: 5px;
     padding:15px;
-    border-color: #ccc;
+    border-color: #ddd;
     vertical-align: top;
     font-family: initial;
     ${props => props.readOnly ? 'background: #fbfbfb' : null}
@@ -31,9 +31,8 @@ const TextArea = styled.textarea`
 const Button = styled.button`
     width:100%;
     line-height: 1;
-    background: ${props => props.checking ? '#fbfbfb' : '#f33'};
+    background: ${props => props.checking ? '#ddd' : '#000'};
     color: ${props => props.checking ? '#333' : '#fff'};
-    border: ${props => props.checking ? '1px solid #ccc' : '1px solid #f33'};
     font-size: 1em;
     font-weight:bold;
     padding: 20px;

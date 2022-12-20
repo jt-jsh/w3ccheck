@@ -11,6 +11,7 @@ class W3C extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            complete: false,
             checking: false,
             lists: false
         }
@@ -27,7 +28,30 @@ class W3C extends Component {
 
             const check_list = document.getElementById("w3c_area").value.split("\n");
 
+            let lists = {};
+
+            for(let key in check_list){
+                lists = {
+                    ...lists,
+                    [key]: {
+                        url: check_list[key].startsWith('http') ? check_list[key] : `https://${check_list[key]}`,
+                        html: {
+                            errors: 'wait'
+                        },
+                        css: {
+                            errors: 'wait'
+                        }
+                    }
+                }
+            }
+
             let i = 0;
+
+            this.setState({
+                lists: lists
+            }, () => {
+                recycle(0);
+            });
 
             const recycle = (num) => {
                 if (i < check_list.length) {
@@ -38,20 +62,20 @@ class W3C extends Component {
                         encode_check_list = 'https://' + check_list[num];
                     }
 
-                    this.setState({
-                        lists: {
-                            ...this.state.lists,
-                            [i]: {
-                                url: encode_check_list,
-                                html: {
-                                    errors: 'wait'
-                                },
-                                css: {
-                                    errors: 'wait'
-                                }
-                            }
-                        }
-                    });
+                    // this.setState({
+                    //     lists: {
+                    //         ...this.state.lists,
+                    //         [i]: {
+                    //             url: encode_check_list,
+                    //             html: {
+                    //                 errors: 'wait'
+                    //             },
+                    //             css: {
+                    //                 errors: 'wait'
+                    //             }
+                    //         }
+                    //     }
+                    // });
 
                     axios.get(`https://validator.w3.org/nu/?doc=${encodeURIComponent(encode_check_list)}&out=json`)
                         .then(result => {
@@ -140,6 +164,7 @@ class W3C extends Component {
                 } else {
                     console.log("End W3C Checked");
                     this.setState({
+                        complete: true,
                         checking: false
                     });
                 }
@@ -154,50 +179,48 @@ class W3C extends Component {
                 }
 
                 axios.get(`https://jigsaw.w3.org/css-validator/validator?uri=${encodeURIComponent(encode_check_list)}&profile=css3svg&output=json`)
-                    .then(result => {
-                        if (result) {
-                            this.setState({
-                                lists: {
-                                    ...this.state.lists,
-                                    [i]: {
-                                        ...this.state.lists[i],
-                                        css: {
-                                            ...this.state.lists[i].css,
-                                            errors: result.data.cssvalidation.errors ? result.data.cssvalidation.errors : 'pass'
-                                        }
-                                    }
-                                }
-                            })
-                        }
-
-                        console.log("CSS CHECK OK");
-
-                        console.log(this.state)
-
-                        i++;
-                        recycle(i);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        
+                .then(result => {
+                    if (result) {
                         this.setState({
                             lists: {
                                 ...this.state.lists,
                                 [i]: {
                                     ...this.state.lists[i],
                                     css: {
-                                        errors: 'fail'
+                                        ...this.state.lists[i].css,
+                                        errors: result.data.cssvalidation.errors ? result.data.cssvalidation.errors : 'pass'
                                     }
                                 }
                             }
                         })
-                        
-                        i++;
-                        recycle(i);
-                    });
+                    }
+
+                    console.log("CSS CHECK OK");
+
+                    i++;
+                    recycle(i);
+                })
+                .catch(err => {
+                    console.log(err);
+                    
+                    this.setState({
+                        lists: {
+                            ...this.state.lists,
+                            [i]: {
+                                ...this.state.lists[i],
+                                css: {
+                                    errors: 'fail'
+                                }
+                            }
+                        }
+                    })
+                    
+                    i++;
+                    recycle(i);
+                });
             }
 
-            recycle(0);
+            // recycle(0);
         } else {
             alert("URL을 작성하세요");
             document.getElementById("w3c_area").focus();
@@ -230,11 +253,11 @@ const Title = styled.h3`
 `;
 
 const W3CCheckWrap = styled.div`
-    padding: 15px;
+    padding: 20px;
     background:#fff;
-    box-shadow: 0 0 5px rgba(0,0,0,.15);
     border-radius: 10px;
     overflow: hidden;
+    border:1px solid #ddd;
 `;
 
 export default W3C;
